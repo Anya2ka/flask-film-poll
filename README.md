@@ -1,5 +1,6 @@
 # Important things
 
+-   If you want to start application without docker, you should download and install [MongoDB](https://www.mongodb.com/download-center/community)
 -   For installing dependecies, you should use `pip install -r requirements.txt`
 -   For starting application without docker, you should use next commands:
 
