@@ -1,0 +1,21 @@
+version: '3'
+services:
+    flask-backend:
+        build: .
+        command: flask run --host=0.0.0.0 --port=8000
+        ports:
+            - 8000:8000
+        volumes:
+            - ./:/var/www/application
+        working_dir: /var/www/application
+        environment:
+            - FLASK_APP=main.py
+            - FLASK_ENV=development
+            - DATABASE_HOST=flask-database
+            - DATABASE_PORT=27017
+            - DATABASE_NAME=film-find
+        depends_on:
+            - flask-database
+
+    flask-database:
+        image: mongo:4.0.10

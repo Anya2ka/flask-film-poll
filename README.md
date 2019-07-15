@@ -1,19 +1,37 @@
 # Important things
 
 -   For installing dependecies, you should use `pip install -r requirements.txt`
--   For starting application, you should use next commands:
+-   For starting application without docker, you should use next commands:
 
 ```bash
 export FLASK_APP=main.py
 flask run --host=0.0.0.0 --port=8000
 ```
 
--   For starting application in development mode, you should use next commands:
+-   For starting application in development mode without docker, you should use next commands:
 
 ```bash
 export FLASK_APP=main.py
 export FLASK_ENV=development
 flask run --host=0.0.0.0 --port=8000
+```
+
+-   For building docker container, you should use next command:
+
+```bash
+docker-compose build
+```
+
+-   For starting docker containers, you should use next command:
+
+```bash
+docker-compose up
+```
+
+-   For running docker application container (without starting), you should use next command:
+
+```bash
+docker-compose run --rm flask-backend bash
 ```
 
 -   For getting database host/port/name, you should use os.getenv(). For example, `db_host = os.getenv('DATABASE_HOST', 'localhost')`
