@@ -59,3 +59,84 @@ docker-compose run --rm flask-backend bash
 ...
 >>>
 ```
+
+## Working with MongoDB (PyMongo)
+
+### Create movie in collection
+
+```python
+database.movies.insert_one({
+    'title': 'Zootopia',
+    'genres': ['cartoon', 'comedy'],
+    'votes': []
+})
+```
+
+### Update movie in collection
+
+```python
+import bson
+database.movies.update_one(
+    {'_id': bson.objectid.ObjectId('5d2e0934e5a86af54dd42b2d')},
+    {'$set': {'title': '1 + 1'}}
+)
+```
+
+### Delete movie from collection
+
+```python
+import bson
+database.movies.delete_one({
+    '_id': bson.objectid.ObjectId('5d2e0934e5a86af54dd42b2e')
+})
+```
+
+### Get all movies from collection
+
+```python
+database.movies.find()
+```
+
+### Get movie by id
+
+```python
+import bson
+database.movies.find_one({
+    '_id': bson.objectid.ObjectId('5d2e0934e5a86af54dd42b2d')
+})
+```
+
+### Add vote into votes field
+
+```python
+import bson
+from datetime import datetime
+database.movies.update_one(
+    {'_id': bson.objectid.ObjectId('5d2e0934e5a86af54dd42b2d')},
+    {
+        '$push': {
+            'votes': {
+                'userId': None,
+                'value': 8,
+                'votedAt': datetime.utcnow()
+            }
+        }
+    }
+)
+```
+
+### Remove vote from votes field
+
+```python
+import bson
+database.movies.update_one(
+    {'_id': bson.objectid.ObjectId('5d2e0934e5a86af54dd42b2d')},
+    {
+        '$pull': {
+            'votes': {
+                'userId': None,
+            }
+        }
+    }
+)
+```
