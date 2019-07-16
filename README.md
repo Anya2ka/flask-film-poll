@@ -161,3 +161,26 @@ database.movies.update_one(
   ]
 }
 ```
+
+## Project structure
+
+```
+<project-name>
+    .git
+    .gitignore
+    Dockerfile
+    docker-compose.yml
+    README.md
+    requirements.txt
+    main.py
+
+    src
+        __init__.py
+        settings.py
+        views.py
+        models.py
+
+        utils
+            __init__.py
+            database.py
+```
