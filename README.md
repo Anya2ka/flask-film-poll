@@ -164,16 +164,20 @@ database.polls.find_one({
         {
             "_id": "<id>",
             "title": "<str>",
-            "genres": ["<str>"],
-            "votes": 0
+            "genres": ["<str>"]
         }
     ],
     "Polls": [
         {
             "_id": "<id>",
-            "movies": ["<id>"],
-            "selected": "<id>",
-            "value": 0
+            "movies": {
+                "<id>": [
+                    {
+                        "value": 0,
+                        "votedAt": "<date>"
+                    }
+                ]
+            }
         }
     ]
 }
@@ -194,8 +198,16 @@ database.polls.find_one({
     src
         __init__.py
         settings.py
-        views.py
-        models.py
+
+        views
+            __init__.py
+            movies.py
+            polls.py
+
+        services
+            __init__.py
+            movies.py
+            polls.py
 
         utils
             __init__.py
