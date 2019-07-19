@@ -1,15 +1,15 @@
 # Important things
 
-- If you want to start application without docker, you should download and install [MongoDB](https://www.mongodb.com/download-center/community)
-- For installing dependecies, you should use `pip install -r requirements.txt`
-- For starting application without docker, you should use next commands:
+-   If you want to start application without docker, you should download and install [MongoDB](https://www.mongodb.com/download-center/community)
+-   For installing dependecies, you should use `pip install -r requirements.txt`
+-   For starting application without docker, you should use next commands:
 
 ```bash
 export FLASK_APP=main.py
 flask run --host=0.0.0.0 --port=8000
 ```
 
-- For starting application in development mode without docker, you should use next commands:
+-   For starting application in development mode without docker, you should use next commands:
 
 ```bash
 export FLASK_APP=main.py
@@ -17,28 +17,28 @@ export FLASK_ENV=development
 flask run --host=0.0.0.0 --port=8000
 ```
 
-- For building docker container, you should use next command:
+-   For building docker container, you should use next command:
 
 ```bash
 docker-compose build
 ```
 
-- For starting docker containers, you should use next command:
+-   For starting docker containers, you should use next command:
 
 ```bash
 docker-compose up
 ```
 
-- For running docker application container (without starting), you should use next command:
+-   For running docker application container (without starting), you should use next command:
 
 ```bash
 docker-compose run --rm flask-backend bash
 ```
 
-- For getting database host/port/name, you should use os.getenv(). For example, `db_host = os.getenv('DATABASE_HOST', 'localhost')`
-- For creating database client, you should use `MongoClient(db_host, db_port)`. For example, `client = MongoClient(db_host, db_port)`
-- For getting access to database, you should use `client[db_name]`. For example, `db = client[db_name]`
-- For getting access to database data, you're able to import database from utils and use database client. For example,
+-   For getting database host/port/name, you should use os.getenv(). For example, `db_host = os.getenv('DATABASE_HOST', 'localhost')`
+-   For creating database client, you should use `MongoClient(db_host, db_port)`. For example, `client = MongoClient(db_host, db_port)`
+-   For getting access to database, you should use `client[db_name]`. For example, `db = client[db_name]`
+-   For getting access to database data, you're able to import database from utils and use database client. For example,
 
 ```
 >>> from src.utils.database import database
@@ -67,8 +67,7 @@ docker-compose run --rm flask-backend bash
 ```python
 database.movies.insert_one({
     'title': 'Zootopia',
-    'genres': ['cartoon', 'comedy'],
-    'votes': []
+    'genres': ['cartoon', 'comedy']
 })
 ```
 
@@ -106,59 +105,77 @@ database.movies.find_one({
 })
 ```
 
-### Add vote into votes field
+### Update votes field in movie
 
 ```python
 import bson
-from datetime import datetime
 database.movies.update_one(
-    {'_id': bson.objectid.ObjectId('5d2e0934e5a86af54dd42b2d')},
-    {
-        '$push': {
-            'votes': {
-                'userId': None,
-                'value': 8,
-                'votedAt': datetime.utcnow()
-            }
-        }
-    }
+    {'_id': bson.objectid.ObjectId('5d305d6809879cadb25bdc7a')},
+    {'$set': {'votes': '1'}}
 )
 ```
 
-### Remove vote from votes field
+### Create a new poll
 
 ```python
 import bson
-database.movies.update_one(
-    {'_id': bson.objectid.ObjectId('5d2e0934e5a86af54dd42b2d')},
-    {
-        '$pull': {
-            'votes': {
-                'userId': None,
-            }
-        }
-    }
+database.polls.insert_one({})
+```
+
+### Update poll by id
+
+```python
+import bson
+database.polls.update_one(
+    {'_id': bson.objectid.ObjectId('5d305ebcf8d4f454109cc32e')},
+    {'$set': {'movies': ['_id': bson.objectid.ObjectId('5d305d6809879cadb25bdc7a'),'_id': bson.objectid.ObjectId('5d2e0934e5a86af54dd42b2d')], 'selected': '_id': bson.objectid.ObjectId('5d305d6809879cadb25bdc7a'), 'value': '1'}}
 )
+```
+
+### Delete poll by id
+
+```python
+import bson
+database.polls.delete_one({
+    '_id': bson.objectid.ObjectId('5d305ebcf8d4f454109cc32e')
+})
+```
+
+### Get all polls
+
+```python
+database.polls.find()
+```
+
+### Get poll by id
+
+```python
+import bson
+database.polls.find_one({
+    '_id': bson.objectid.ObjectId('5d305ebcf8d4f454109cc32e')
+})
 ```
 
 ## Database structure
 
 ```json
 {
-  "Movies": [
-    {
-      "_id": "<id>",
-      "title": "<str>",
-      "genres": ["<str>"],
-      "votes": [
+    "Movies": [
         {
-          "userId": null,
-          "value": 5,
-          "votedAt": "<date>"
+            "_id": "<id>",
+            "title": "<str>",
+            "genres": ["<str>"],
+            "votes": 0
         }
-      ]
-    }
-  ]
+    ],
+    "Polls": [
+        {
+            "_id": "<id>",
+            "movies": ["<id>"],
+            "selected": "<id>",
+            "value": 0
+        }
+    ]
 }
 ```
 
@@ -183,4 +200,20 @@ database.movies.update_one(
         utils
             __init__.py
             database.py
+```
+
+## Endpoints
+
+```
+(GET)       /movies/        -> 3 random movies with rating
+(POST)      /movies/        -> Create movie ({"title": "<str>", "genres": ["<str>"]})
+(GET)       /movies/<id>/   -> Fetch movie details by id
+(PATCH)     /movies/<id>/   -> Update movie by id ({"title": "<str>", "genres": ["<str>"], "votes": 0})
+(DELETE)    /movies/<id>/   -> Delete movie by id
+(POST)      /polls/         -> Create a new poll ({"movies": ["<id>"], "selected": "<id>", "value": 0})
+(GET)       /polls/         -> Fetch list of polls
+(GET)       /polls/<id>/    -> Fetch polls details by id
+(PATCH)     /polls/<id>/    -> Update poll by id ({"movies": ["<id>"], "selected": "<id>", "value": 0})
+(DELETE)    /polls/<id>/    -> Delete poll by id
+
 ```
