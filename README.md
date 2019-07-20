@@ -86,7 +86,7 @@ database.movies.update_one(
 ```python
 import bson
 database.movies.delete_one({
-    '_id': bson.objectid.ObjectId('5d2e0934e5a86af54dd42b2e')
+    '_id': bson.objectid.ObjectId('5d3302d443cdef124736ae25')
 })
 ```
 
@@ -102,57 +102,6 @@ database.movies.find()
 import bson
 database.movies.find_one({
     '_id': bson.objectid.ObjectId('5d2e0934e5a86af54dd42b2d')
-})
-```
-
-### Update votes field in movie
-
-```python
-import bson
-database.movies.update_one(
-    {'_id': bson.objectid.ObjectId('5d305d6809879cadb25bdc7a')},
-    {'$set': {'votes': '1'}}
-)
-```
-
-### Create a new poll
-
-```python
-import bson
-database.polls.insert_one({})
-```
-
-### Update poll by id
-
-```python
-import bson
-database.polls.update_one(
-    {'_id': bson.objectid.ObjectId('5d305ebcf8d4f454109cc32e')},
-    {'$set': {'movies': ['_id': bson.objectid.ObjectId('5d305d6809879cadb25bdc7a'),'_id': bson.objectid.ObjectId('5d2e0934e5a86af54dd42b2d')], 'selected': '_id': bson.objectid.ObjectId('5d305d6809879cadb25bdc7a'), 'value': '1'}}
-)
-```
-
-### Delete poll by id
-
-```python
-import bson
-database.polls.delete_one({
-    '_id': bson.objectid.ObjectId('5d305ebcf8d4f454109cc32e')
-})
-```
-
-### Get all polls
-
-```python
-database.polls.find()
-```
-
-### Get poll by id
-
-```python
-import bson
-database.polls.find_one({
-    '_id': bson.objectid.ObjectId('5d305ebcf8d4f454109cc32e')
 })
 ```
 
