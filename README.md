@@ -100,6 +100,7 @@ database.movies.find()
 
 ```python
 import bson
+
 database.movies.find_one({
     '_id': bson.objectid.ObjectId('5d2e0934e5a86af54dd42b2d')
 })
@@ -165,16 +166,16 @@ database.movies.find_one({
 
 ## Endpoints
 
-```
-(GET)       /movies/        -> 3 random movies with rating
-(POST)      /movies/        -> Create movie ({"title": "<str>", "genres": ["<str>"]})
-(GET)       /movies/<id>/   -> Fetch movie details by id
-(PATCH)     /movies/<id>/   -> Update movie by id ({"title": "<str>", "genres": ["<str>"], "votes": 0})
-(DELETE)    /movies/<id>/   -> Delete movie by id
-(POST)      /polls/         -> Create a new poll ({"movies": ["<id>"], "selected": "<id>", "value": 0})
-(GET)       /polls/         -> Fetch list of polls
-(GET)       /polls/<id>/    -> Fetch polls details by id
-(PATCH)     /polls/<id>/    -> Update poll by id ({"movies": ["<id>"], "selected": "<id>", "value": 0})
-(DELETE)    /polls/<id>/    -> Delete poll by id
-
-```
+| Method | Endpoint                | Data                                      | Description                                |
+| ------ | ----------------------- | ----------------------------------------- | ------------------------------------------ |
+| GET    | `/movies/`              |                                           | Get list of movies                         |
+| POST   | `/movies/`              | `{"title": "<str>", "genres": ["<str>"]}` | Create movie                               |
+| GET    | `/movies/<id>/`         |                                           | Fetch movie details by id                  |
+| PATCH  | `/movies/<id>/`         | `{"title": "<str>", "genres": ["<str>"]}` | Update movie by id                         |
+| DELETE | `/movies/<id>/`         |                                           | Delete movie by id                         |
+| POST   | `/polls/`               | `{"movies": {"<id>": 0}}`                 | Create a new poll                          |
+| GET    | `/polls/`               |                                           | Fetch list of polls                        |
+| GET    | `/polls/<id>/`          |                                           | Fetch poll details by id                   |
+| PATCH  | `/polls/<id>/`          | `{"movies": {"<id>": 0}}`                 | Update poll by id                          |
+| DELETE | `/polls/<id>/`          |                                           | Delete poll by id                          |
+| PUT    | `/polls/<id>/<movieId>` | `{"value": 0}`                            | Update movie results by PollID and MovieID |

@@ -31,8 +31,6 @@ def update(_id, data={}):
     if result.matched_count == 0:
         raise ValueError("Invalid id")
 
-    return _id
-
 
 def delete(_id):
     result = database.movies.delete_one({
@@ -41,5 +39,3 @@ def delete(_id):
 
     if result.deleted_count == 0:
         raise ValueError("Invalid id")
-
-    return _id

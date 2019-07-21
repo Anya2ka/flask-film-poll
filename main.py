@@ -1,7 +1,7 @@
 from flask import Flask
+from src.server import api
+
+import src.views.movies  # noqa
+
 app = Flask(__name__)
-
-
-@app.route('/')
-def hello_world():
-    return 'Hello, World!'
+api.init_app(app)
