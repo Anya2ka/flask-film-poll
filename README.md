@@ -106,6 +106,54 @@ database.movies.find_one({
 })
 ```
 
+### Create poll in collection
+
+```python
+database.polls.insert_one({
+    'movies': {'5d359c2120c244808b20e2e2': []}
+})
+```
+
+### Update poll in collection
+
+```python
+import bson
+database.polls.update_one(
+    {'_id': bson.objectid.ObjectId('5d35b32e20c244808b20e2e3')},
+    {
+        '$set': {
+            'movies': {'5d359c2120c244808b20e2e2': []}
+        }
+    }
+)
+```
+
+### Update poll details in collection
+
+```python
+database.polls.update_one(
+    {'_id': bson.objectid.ObjectId('5d35b32e20c244808b20e2e3')},
+    {
+        '$push': {
+            'movies.5d359c2120c244808b20e2e2': {'value': 5}
+        }
+    }
+)
+```
+
+### Delete poll in collection
+
+```python
+import bson
+database.polls.delete_one({'_id': bson.objectid.ObjectId('5d305ebcf8d4f454109cc32e')})
+```
+
+### Get all polls from collection
+
+```python
+database.polls.find()
+```
+
 ## Database structure
 
 ```json
