@@ -5,3 +5,4 @@ api = Api(
 )
 
 MovieNamespace = api.namespace('movies', description='Movie actions')
+PollNamespace = api.namespace('polls', description='Poll actions')
