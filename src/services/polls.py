@@ -1,7 +1,9 @@
+from datetime import datetime
+
 import bson
 
+
 from ..utils.database import database
-from datetime import datetime
 
 
 def create(data={}):
