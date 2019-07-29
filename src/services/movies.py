@@ -7,13 +7,13 @@ def create(data={}):
     return database.movies.insert_one(data).inserted_id
 
 
-def find():
-    return list(database.movies.find())
+def find(query={}):
+    return list(database.movies.find(query))
 
 
-def find_by_id(_id):
+def find_by_id(movie_id):
     result = database.movies.find_one({
-        '_id': bson.objectid.ObjectId(_id)
+        '_id': bson.objectid.ObjectId(movie_id)
     })
 
     if result is None:
@@ -22,9 +22,9 @@ def find_by_id(_id):
     return result
 
 
-def update(_id, data={}):
+def update(movie_id, data={}):
     result = database.movies.update_one(
-        {'_id': bson.objectid.ObjectId(_id)},
+        {'_id': bson.objectid.ObjectId(movie_id)},
         {'$set': data}
     )
 
@@ -32,9 +32,9 @@ def update(_id, data={}):
         raise ValueError("Invalid id")
 
 
-def delete(_id):
+def delete(movie_id):
     result = database.movies.delete_one({
-        '_id': bson.objectid.ObjectId(_id)
+        '_id': bson.objectid.ObjectId(movie_id)
     })
 
     if result.deleted_count == 0:
