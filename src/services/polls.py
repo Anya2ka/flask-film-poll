@@ -14,9 +14,9 @@ def find():
     return list(database.polls.find())
 
 
-def find_by_id(_id):
+def find_by_id(poll_id):
     result = database.polls.find_one({
-        '_id': bson.objectid.ObjectId(_id)
+        '_id': bson.objectid.ObjectId(poll_id)
     })
 
     if result is None:
@@ -25,9 +25,9 @@ def find_by_id(_id):
     return result
 
 
-def update(_id, data={}):
+def update(poll_id, data={}):
     result = database.polls.update_one(
-        {'_id': bson.objectid.ObjectId(_id)},
+        {'_id': bson.objectid.ObjectId(poll_id)},
         {'$set': data}
     )
 
@@ -35,28 +35,28 @@ def update(_id, data={}):
         raise ValueError("Invalid id")
 
 
-def update_by_details(_id, movie_id, value=None):
+def update_by_details(poll_id, movie_id, value=None):
     if (
         database.movies.find_one({
             '_id': bson.objectid.ObjectId(movie_id)
         }) is None
     ):
-        raise ValueError('Movie with _id \'{}\' not found '.format(movie_id))
+        raise ValueError('Movie with id \'{}\' not found '.format(movie_id))
 
     key = 'movies.{}'.format(movie_id)
     data = {'votedAt': datetime.now(), 'value': value}
     result = database.polls.update_one(
-        {'_id': bson.objectid.ObjectId(_id)},
+        {'_id': bson.objectid.ObjectId(poll_id)},
         {'$push': {key: data}}
     )
 
     if result.matched_count == 0:
-        raise ValueError('Poll with _id \'{}\' not found '.format(_id))
+        raise ValueError('Poll with id \'{}\' not found '.format(poll_id))
 
 
-def delete(_id):
+def delete(poll_id):
     result = database.polls.delete_one({
-        '_id': bson.objectid.ObjectId(_id)
+        '_id': bson.objectid.ObjectId(poll_id)
     })
 
     if result.deleted_count == 0:

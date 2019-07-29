@@ -28,7 +28,7 @@ ValueRequestModel = api.model('ValueRequest', {
 
 # Response
 PollModel = api.model('Poll', {
-    '_id': fields.String(required=False, readonly=True),
+    'id': fields.String(required=False, readonly=True, attribute='_id'),
     'movies': fields.Raw(
         mask=MovieMask,
         example={'<id>': 0}
@@ -48,51 +48,51 @@ class PollsList(Resource):
     def post(self):
         data = marshal(api.payload, PollRequestModel)
 
-        _id = PollService.create(data)
-        return PollService.find_by_id(_id)
+        poll_id = PollService.create(data)
+        return PollService.find_by_id(poll_id)
 
 
-@PollNamespace.route('/<string:pk>/')
+@PollNamespace.route('/<string:poll_id>/')
 class PollDetails(Resource):
     @PollNamespace.marshal_with(PollModel)
-    def get(self, pk):
+    def get(self, poll_id):
         try:
-            return PollService.find_by_id(pk)
+            return PollService.find_by_id(poll_id)
         except (ValueError, bson.errors.InvalidId):
             PollNamespace.abort(
-                404, 'Poll with _id \'{}\' not found '.format(pk))
+                404, 'Poll with id \'{}\' not found '.format(poll_id))
 
     @PollNamespace.expect(PollRequestModel)
     @PollNamespace.marshal_with(PollModel)
-    def patch(self, pk):
+    def patch(self, poll_id):
         try:
-            PollService.update(pk, api.payload)
-            return PollService.find_by_id(pk)
+            PollService.update(poll_id, api.payload)
+            return PollService.find_by_id(poll_id)
         except (ValueError, bson.errors.InvalidId):
             PollNamespace.abort(
-                404, 'Poll with _id \'{}\' not found '.format(pk))
+                404, 'Poll with id \'{}\' not found '.format(poll_id))
 
-    def delete(self, pk):
+    def delete(self, poll_id):
         try:
-            PollService.delete(pk)
+            PollService.delete(poll_id)
             return None, 204
         except (ValueError, bson.errors.InvalidId):
             PollNamespace.abort(
-                404, 'Poll with _id \'{}\' not found '.format(pk))
+                404, 'Poll with id \'{}\' not found '.format(poll_id))
 
 
-@PollNamespace.route('/<string:pk>/<string:movie_pk>/')
+@PollNamespace.route('/<string:poll_id>/<string:movie_id>/')
 class MovieValue(Resource):
     @PollNamespace.expect(ValueRequestModel)
     @PollNamespace.marshal_with(PollModel)
-    def post(self, pk, movie_pk):
+    def post(self, poll_id, movie_id):
         data = api.payload["value"]
         if data < 1 or data > 10:
             PollNamespace.abort(
                 400, "Unsupported value")
         try:
-            PollService.update_by_details(pk, movie_pk, data)
-            return PollService.find_by_id(pk)
+            PollService.update_by_details(poll_id, movie_id, data)
+            return PollService.find_by_id(poll_id)
         except ValueError as error:
             PollNamespace.abort(404, error.args[0])
         except bson.errors.InvalidId as error:
